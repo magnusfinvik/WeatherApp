@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 // TODO: 03.03.2016 lag toolbar og tingene som skal være inne i den
 /**
  * A placeholder fragment containing a simple view.
@@ -35,7 +36,6 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     SimpleCursorAdapter cursorAdapter = null;
     private WeatherDataSource dataSource = null;
-    private ListView myListView;
     private boolean downloadInProgress = false;
     private ArrayList<WeatherData> weatherDataList = new ArrayList<>();
 
@@ -44,6 +44,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         super.onCreate(savedInstanceState);
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
+        Collections.synchronizedList(weatherDataList);
     }
 
     @Override
@@ -61,10 +62,6 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
         Button btnShowData = (Button)this.getActivity().findViewById(R.id.btnShowData);
         btnShowData.setOnClickListener(this);
-
-
-        myListView = (ListView)this.getActivity().findViewById(R.id.myListView);
-        myListView.setOnItemClickListener(this);
 
     }
 
@@ -87,26 +84,23 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     @Override
     public void onClick(View v) {
-        Thread thread = null;
         switch (v.getId()){
             case R.id.btnDownloadController:
                 Toast toast = Toast.makeText(getContext(), "download", Toast.LENGTH_SHORT);
                 toast.show();
                 if(!downloadInProgress){
                     downloadInProgress = true;
-                    thread = new Thread(new Runnable() {
+                    new Thread(new Runnable() {
                         @Override
                         public void run() {
                             do {
                                 downloadOneItem();
                             }while (downloadInProgress == true);
                         }
-                    });
-                    thread.start();
+                    }).start();
 
                     // TODO: 03.03.2016 kontunuerlig nedlasting til vi sier stop
                 }else{
-                    thread.interrupt();
                     downloadInProgress = false;
                     putDataFromListToDataBase();
                 }
