@@ -12,10 +12,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.Viewport;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,7 +30,6 @@ import java.util.ArrayList;
  */
 public class MyListFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    private LineGraphSeries<DataPoint> series;
     private WeatherDataSource dataSource = null;
     private boolean downloadInProgress = false;
     private ArrayList<WeatherData> weatherDataList = new ArrayList<>();
@@ -45,10 +40,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         super.onCreate(savedInstanceState);
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
-        graphView = (GraphView) this.getActivity().findViewById(R.id.graph);
-        series = new LineGraphSeries<DataPoint>();
-        graphView.addSeries(series);
-        Viewport viewport = graphView.getViewport();
+        graphView = (GraphView)this.getActivity().findViewById(R.id.graph);
 
     }
 
