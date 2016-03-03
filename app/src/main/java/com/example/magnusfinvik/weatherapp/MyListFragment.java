@@ -44,7 +44,6 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         super.onCreate(savedInstanceState);
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
-        Collections.synchronizedList(weatherDataList);
     }
 
     @Override
@@ -102,7 +101,6 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                     // TODO: 03.03.2016 kontunuerlig nedlasting til vi sier stop
                 }else{
                     downloadInProgress = false;
-                    putDataFromListToDataBase();
                 }
                 break;
             case R.id.btnShowData:
@@ -135,7 +133,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                     int responseCode = httpURLConnection.getResponseCode();
                     if(responseCode == HttpURLConnection.HTTP_OK){
                         String serverResponse = readServerResponse(httpURLConnection.getInputStream());
-                        addToWeatherDataList(serverResponse);
+                        addToWeatherDataBase(serverResponse);
                     }else {
                         Log.d(this.getClass().toString(), "error in httpconnection");
                     }
@@ -156,17 +154,13 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     }
 
-    private void addToWeatherDataList(String serverResponse) {
+    private void addToWeatherDataBase(String serverResponse) {
         Gson gson = new Gson();
-        weatherDataList.add(gson.fromJson(serverResponse, WeatherData.class));
+        WeatherData weatherData = gson.fromJson(serverResponse, WeatherData.class);
+        boolean dataAddaedToDB = dataSource.CreateWeatherData(weatherData.getStation_name(), weatherData.getStation_position(),
+                weatherData.getTimestamp(), weatherData.getTemperature(), weatherData.getPressure(), weatherData.getHumidity());
     }
 
-    private void putDataFromListToDataBase() {
-        for (WeatherData data: weatherDataList) {
-            boolean dataAddaedToDB = dataSource.CreateWeatherData(data.getStation_name(), data.getStation_position(), data.getTimestamp(),
-                    data.getTemperature(), data.getPressure(), data.getHumidity());
-        }
-    }
 
     private String readServerResponse(InputStream inputStream) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
