@@ -15,6 +15,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.Series;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,12 +40,14 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private WeatherDataSource dataSource = null;
     private boolean downloadInProgress = false;
     private ArrayList<WeatherData> weatherDataList = new ArrayList<>();
+    private GraphView graphView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
+        graphView = (GraphView) this.getActivity().findViewById(R.id.graph);
     }
 
     @Override
@@ -98,7 +102,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                         }
                     }).start();
 
-                    // TODO: 03.03.2016 kontunuerlig nedlasting til vi sier stop
+                    // TODO: 03.03.2016 kontunuerlig nedlasting til hvist tidspunkt
                 }else{
                     downloadInProgress = false;
                 }
@@ -111,6 +115,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                 break;
         }
     }
+
 
     private void showDataFromDataBase() {
         Cursor cursor = dataSource.getAllContacts();
