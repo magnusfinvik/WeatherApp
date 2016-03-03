@@ -78,13 +78,17 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                 Toast toast = Toast.makeText(getContext(), "download", Toast.LENGTH_SHORT);
                 toast.show();
                 if(!downloadInProgress){
-                    downloadInProgress = false;
+                    downloadInProgress = true;
                     startDownload();
+                }else{
+                    downloadInProgress = false;
+                    putDataFromListToDataBase();
                 }
                 break;
             case R.id.btnShowData:
                 Toast toast2 = Toast.makeText(getContext(), "show Data", Toast.LENGTH_SHORT);
                 toast2.show();
+
                 break;
         }
     }
@@ -125,6 +129,13 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private void addToWeatherDataList(String serverResponse) {
         Gson gson = new Gson();
         weatherDataList.add(gson.fromJson(serverResponse, WeatherData.class));
+    }
+
+    private void putDataFromListToDataBase() {
+        for (WeatherData data: weatherDataList) {
+            dataSource.CreateWeatherData(data.getStation_name(), data.getStation_position(), data.getTimestamp(),
+                    data.getTemperature(), data.getPressure(), data.getHumidity());
+        }
     }
 
     private String readServerResponse(InputStream inputStream) {
