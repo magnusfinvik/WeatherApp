@@ -1,5 +1,6 @@
 package com.example.magnusfinvik.weatherapp;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,6 +18,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,6 +35,13 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private ListView myListView;
     private boolean downloadInProgress = false;
     private ArrayList<WeatherData> weatherDataList = new ArrayList<>();
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        CookieManager cookieManager = new CookieManager();
+        CookieHandler.setDefault(cookieManager);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,7 +89,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                 toast.show();
                 if(!downloadInProgress){
                     downloadInProgress = true;
-                    startDownload();
+                    downloadOneItem();
                 }else{
                     downloadInProgress = false;
                     putDataFromListToDataBase();
@@ -88,12 +98,19 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
             case R.id.btnShowData:
                 Toast toast2 = Toast.makeText(getContext(), "show Data", Toast.LENGTH_SHORT);
                 toast2.show();
-
+                showDataFromDataBase();
                 break;
         }
     }
 
-    private void startDownload() {
+    private void showDataFromDataBase() {
+        Cursor cursor = dataSource.getAllContacts();
+        String test = cursor.getString(cursor.getColumnIndex("station_name"));
+        Toast toast2 = Toast.makeText(getContext(), test, Toast.LENGTH_SHORT);
+        toast2.show();
+    }
+
+    private void downloadOneItem() {
         Runnable run = new Runnable() {
             @Override
             public void run() {
