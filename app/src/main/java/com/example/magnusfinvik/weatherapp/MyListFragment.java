@@ -27,7 +27,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+// TODO: 03.03.2016 lag toolbar og tingene som skal være inne i den
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -93,13 +93,23 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                 toast.show();
                 if(!downloadInProgress){
                     downloadInProgress = true;
-                    downloadOneItem();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            do {
+                                downloadOneItem();
+                            }while (downloadInProgress == true);
+                        }
+                    }).start();
+
+                    // TODO: 03.03.2016 kontunuerlig nedlasting til vi sier stop
                 }else{
                     downloadInProgress = false;
                     putDataFromListToDataBase();
                 }
                 break;
             case R.id.btnShowData:
+                // TODO: 03.03.2016 vis i graf eller noe annet
                 Toast toast2 = Toast.makeText(getContext(), "show Data", Toast.LENGTH_SHORT);
                 toast2.show();
                 showDataFromDataBase();
