@@ -87,23 +87,26 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     @Override
     public void onClick(View v) {
+        Thread thread = null;
         switch (v.getId()){
             case R.id.btnDownloadController:
                 Toast toast = Toast.makeText(getContext(), "download", Toast.LENGTH_SHORT);
                 toast.show();
                 if(!downloadInProgress){
                     downloadInProgress = true;
-                    new Thread(new Runnable() {
+                    thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             do {
                                 downloadOneItem();
                             }while (downloadInProgress == true);
                         }
-                    }).start();
+                    });
+                    thread.start();
 
                     // TODO: 03.03.2016 kontunuerlig nedlasting til vi sier stop
                 }else{
+                    thread.interrupt();
                     downloadInProgress = false;
                     putDataFromListToDataBase();
                 }
