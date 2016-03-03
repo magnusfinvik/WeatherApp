@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -28,6 +29,8 @@ import java.util.Collection;
  * A placeholder fragment containing a simple view.
  */
 public class MyListFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+
+    private WeatherDataSource dataSource = null;
     private ListView myListView;
     private boolean downloadInProgress = false;
     private ArrayList<WeatherData> weatherDataList = new ArrayList<>();
@@ -55,6 +58,16 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         myListView = (ListView)this.getActivity().findViewById(R.id.myListView);
         myListView.setOnItemClickListener(this);
 
+    }
+
+    @Override
+    public void onStart() {
+        dataSource = new WeatherDataSource(this);
+        try {
+            dataSource.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

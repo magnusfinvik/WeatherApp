@@ -24,7 +24,7 @@ public class WeatherDataSource {
             dbHelper.WEATHER_DATA_HUMIDITY
     };
 
-    public WeatherDataSource(Fragment parentFragment) {
+    public WeatherDataSource(MyListFragment parentFragment) {
         parent = parentFragment;
         dbHelper = new MySQLiteHelper(parent.getActivity());
     }
@@ -53,6 +53,11 @@ public class WeatherDataSource {
         }else {
             return false;
         }
+    }
+
+    public void deleteWeatherData(WeatherData weatherData){
+        long id = weatherData.getId();
+        database.delete(dbHelper.WEATHER_DATA_TABLE, dbHelper.WEATHER_DATA_ID + "=" + id, null);
     }
 
     public Cursor getAllContacts (){
