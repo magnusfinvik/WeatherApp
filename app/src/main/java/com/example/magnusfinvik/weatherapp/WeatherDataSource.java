@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class WeatherDataSource {
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
-    private Fragment parent;
+    private MyListFragment parent;
 
     public String[] dataColoumns = {
             dbHelper.WEATHER_DATA_STATION_NAME,

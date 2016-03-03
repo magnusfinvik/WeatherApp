@@ -1,7 +1,7 @@
 package com.example.magnusfinvik.weatherapp;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +22,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -34,10 +32,6 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private ListView myListView;
     private boolean downloadInProgress = false;
     private ArrayList<WeatherData> weatherDataList = new ArrayList<>();
-
-    public MyListFragment() {
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,12 +56,19 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     @Override
     public void onStart() {
+        super.onStart();
         dataSource = new WeatherDataSource(this);
         try {
             dataSource.open();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        dataSource.close();
     }
 
     @Override
