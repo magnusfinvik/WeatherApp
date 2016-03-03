@@ -11,14 +11,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "Weather_data.db";
     private static final int DATABASE_VERSION = 1;
 
-    private static final String WEATHER_DATA_TABLE = "WeatherDatas";
-    private static final String WEATHER_DATA_ID = "id";
-    private static final String WEATHER_DATA_STATION_NAME = "station_name";
-    private static final String WEATHER_DATA_STATION_POSITION = "station_position";
-    private static final String WEATHER_DATA_TIMESTAMP = "timestamp";
-    private static final String WEATHER_DATA_TEMPERATURE = "temperature";
-    private static final String WEATHER_DATA_PRESSURE = "pressure";
-    private static final String WEATHER_DATA_HUMIDITY = "humidity";
+    public static final String WEATHER_DATA_TABLE = "WeatherDatas";
+    public static final String WEATHER_DATA_ID = "id";
+    public static final String WEATHER_DATA_STATION_NAME = "station_name";
+    public static final String WEATHER_DATA_STATION_POSITION = "station_position";
+    public static final String WEATHER_DATA_TIMESTAMP = "timestamp";
+    public static final String WEATHER_DATA_TEMPERATURE = "temperature";
+    public static final String WEATHER_DATA_PRESSURE = "pressure";
+    public static final String WEATHER_DATA_HUMIDITY = "humidity";
 
 
     private static final String WEATHER_DATA_TABLE_CREATE = "create table " + WEATHER_DATA_TABLE + "("
