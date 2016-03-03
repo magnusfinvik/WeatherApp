@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
  */
 public class MyListFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
+    SimpleCursorAdapter cursorAdapter = null;
     private WeatherDataSource dataSource = null;
     private ListView myListView;
     private boolean downloadInProgress = false;
@@ -58,6 +61,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
         Button btnShowData = (Button)this.getActivity().findViewById(R.id.btnShowData);
         btnShowData.setOnClickListener(this);
+
 
         myListView = (ListView)this.getActivity().findViewById(R.id.myListView);
         myListView.setOnItemClickListener(this);
@@ -105,9 +109,11 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     private void showDataFromDataBase() {
         Cursor cursor = dataSource.getAllContacts();
-        String test = cursor.getString(cursor.getColumnIndex("station_name"));
-        Toast toast2 = Toast.makeText(getContext(), test, Toast.LENGTH_SHORT);
-        toast2.show();
+        if(cursor.moveToFirst()) {
+            String test = cursor.getString(cursor.getColumnIndex("station_name"));
+            Toast toast2 = Toast.makeText(getContext(), test, Toast.LENGTH_SHORT);
+            toast2.show();
+        }
     }
 
     private void downloadOneItem() {
