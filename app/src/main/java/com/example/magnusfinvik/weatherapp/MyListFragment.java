@@ -146,6 +146,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private void addToWeatherDataList(String serverResponse) {
         Gson gson = new Gson();
         weatherDataList.add(gson.fromJson(serverResponse, WeatherData.class));
+        Log.d(this.getClass().toString(), String.valueOf(weatherDataList.get(weatherDataList.size()-1)));
     }
 
     private void putDataFromListToDataBase() {
