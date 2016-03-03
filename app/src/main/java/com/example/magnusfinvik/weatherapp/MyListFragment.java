@@ -120,7 +120,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private void showDataFromDataBase() {
         Cursor cursor = dataSource.getAllContacts();
         if(cursor.moveToFirst()) {
-            String test = cursor.getString(cursor.getColumnIndex("station_name"));
+            String test = cursor.getString(cursor.getColumnIndex("id"));
             Toast toast2 = Toast.makeText(getContext(), test, Toast.LENGTH_SHORT);
             toast2.show();
         }
