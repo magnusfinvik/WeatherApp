@@ -62,29 +62,23 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     }
  */
         GraphView graph = (GraphView)this.getActivity().findViewById(R.id.graph);
-    LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
-            new DataPoint(0, 1),
-            new DataPoint(1, -10),
-            new DataPoint(2, 20),
-            new DataPoint(3, 2),
-            new DataPoint(8, 6)
-    });
+    LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB();
         graph.addSeries(series);
     }
 
-    private void generateDataFromDB() {
-        dataPoints = new ArrayList<DataPoint>();
-
-        for(int i = 0; i<numberOfPoints; i++){
+    private LineGraphSeries<DataPoint> generateLineGraphDataFromDB() {
+            int count = 0;
+            ArrayList<DataPoint> dataPoints = new ArrayList<DataPoint>();
             Cursor cursor = dataSource.getAllContacts();
-            if(cursor.moveToFirst()) {
+            while(cursor.moveToNext()) {
                 double temperature = cursor.getDouble(cursor.getColumnIndex("temperature"));
-                double x = i;
+                double x = count++;
                 double y = temperature;
                 DataPoint point = new DataPoint(x, y);
                 dataPoints.add(point);
             }
-        }
+        LineGraphSeries<DataPoint> graphSeries = new LineGraphSeries<DataPoint>((DataPoint[]) dataPoints.toArray());
+        return graphSeries;
     }
 
     @Override
