@@ -40,23 +40,27 @@
         android:orientation="horizontal"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp">
-        <CheckBox
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkbox_temperature"
+            android:id="@+id/radiobutton_temperature"
             android:text="temperature" />
-        <CheckBox
+        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkbox_pressure"
+            android:id="@+id/radiobutton_pressure"
             android:text="pressure" />
-        <CheckBox
+        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkbox_humidity"
+            android:id="@+id/radiobutton_humidity"
             android:text="humidity" />
+        </RadioGroup>
     </LinearLayout>
-
 
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
