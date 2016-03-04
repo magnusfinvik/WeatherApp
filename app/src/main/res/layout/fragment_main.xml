@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <Switch
             android:id="@+id/btnDownloadController"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,11 +30,33 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp">
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkbox_temperature"
+            android:text="temperature" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkbox_pressure"
+            android:text="pressure" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkbox_humidity"
+            android:text="humidity" />
+    </LinearLayout>
+
 
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:layout_height="300dip"
-        android:layout_marginTop="70dp"
+        android:layout_height="match_parent"
         android:id="@+id/graph"/>
 
 </LinearLayout>
