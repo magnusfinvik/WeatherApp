@@ -2,6 +2,7 @@ package com.example.magnusfinvik.weatherapp;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -131,8 +132,15 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                                 long timeEnd = System.currentTimeMillis();
                                 timeElapsed = timeEnd - timeStart;
                             }while (downloadInProgress == true && timeElapsed < 5000);
-                            Switch downloadSwitch = (Switch) getActivity().findViewById(R.id.btnDownloadController);
-                            downloadSwitch.toggle();
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Switch downloadSwitch = (Switch) getActivity().findViewById(R.id.btnDownloadController);
+                                    downloadSwitch.toggle();;
+                                }
+                            }, 100);
+
                         }
                     }).start();
 
