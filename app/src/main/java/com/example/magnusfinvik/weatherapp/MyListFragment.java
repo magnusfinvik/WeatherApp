@@ -45,7 +45,9 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         super.onCreate(savedInstanceState);
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
+    }
 
+    private void generateGraphView() {
         graphView = (GraphView)this.getActivity().findViewById(R.id.graph);
         dataPoints = generateDataFromDB();
         series = new LineGraphSeries<DataPoint>();
