@@ -41,7 +41,6 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
         graphView = (GraphView)this.getActivity().findViewById(R.id.graph);
-
     }
 
     @Override
