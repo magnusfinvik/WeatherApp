@@ -3,8 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.magnusfinvik.weatherapp.MainActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:id="@+id/action_changedownloadtime"
+        android:orderInCategory="80"
+        android:title="change downloadtime"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_changeweatherstation"
+        android:orderInCategory="85"
+        android:title="change station"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_emptydatabase"
+        android:orderInCategory="90"
+        android:title="empty database"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_close"
+        android:orderInCategory="100"
+        android:title="close"
+        app:showAsAction="never"/>
 </menu>
