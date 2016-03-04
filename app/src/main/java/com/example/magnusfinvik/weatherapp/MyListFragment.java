@@ -35,11 +35,8 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     private WeatherDataSource dataSource = null;
     private boolean downloadInProgress = false;
-    private ArrayList<WeatherData> weatherDataList = new ArrayList<>();
-    private GraphView graphView;
-    private LineGraphSeries<DataPoint> series;
-    private ArrayList<DataPoint> dataPoints;
-    private int numberOfPoints = 100;
+    String station_name = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +48,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         GraphView graph = (GraphView)this.getActivity().findViewById(R.id.graph);
     LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB();
         graph.addSeries(series);
+        graph.setTitle(station_name);
     }
 
     private LineGraphSeries<DataPoint> generateLineGraphDataFromDB() {
@@ -58,7 +56,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         ArrayList<DataPoint> dataPoints = new ArrayList<DataPoint>();
         Cursor cursor = dataSource.getAllContacts();
 
-        String station_name = null;
+
         while(cursor.moveToNext()) {
             if(station_name == null){
                 station_name = cursor.getString(cursor.getColumnIndex("station_name"));
@@ -76,8 +74,6 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
             count++;
         }
         LineGraphSeries<DataPoint> graphSeries = new LineGraphSeries<DataPoint>(points);
-        graphSeries.setTitle(station_name);
-
         return graphSeries;
     }
 
