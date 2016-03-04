@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.Switch;
 
@@ -29,7 +28,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-// TODO: 03.03.2016 lag toolbar og tingene som skal være inne i den
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -47,25 +45,25 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     private void generateGraphView() {
-        RadioButton radionButton;
+        RadioButton radioButton;
         GraphView graph = (GraphView)this.getActivity().findViewById(R.id.graph);
         graph.removeAllSeries();
-        radionButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_temperature);
-        if(radionButton.isChecked()) {
+        radioButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_temperature);
+        if(radioButton.isChecked()) {
             LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("temperature");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
         }
-        radionButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_humidity);
-        if(radionButton.isChecked()){
+        radioButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_humidity);
+        if(radioButton.isChecked()){
             LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("humidity");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
         }
-        radionButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_pressure);
-        if(radionButton.isChecked()){
+        radioButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_pressure);
+        if(radioButton.isChecked()){
             LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("pressure");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
