@@ -46,7 +46,11 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
 
-
+        graphView = (GraphView)this.getActivity().findViewById(R.id.graph);
+        dataPoints = generateDataFromDB();
+        series = new LineGraphSeries<DataPoint>();
+        series.setDrawDataPoints(true);
+        graphView.addSeries(series);
     }
 
     private DataPoint[] generateDataFromDB() {
@@ -129,11 +133,6 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                 Toast toast2 = Toast.makeText(getContext(), "show Data", Toast.LENGTH_SHORT);
                 toast2.show();
                 showDataFromDataBase();
-                graphView = (GraphView)this.getActivity().findViewById(R.id.graph);
-                dataPoints = generateDataFromDB();
-                series = new LineGraphSeries<DataPoint>();
-                series.setDrawDataPoints(true);
-                graphView.addSeries(series);
                 break;
         }
     }
