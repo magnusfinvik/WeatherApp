@@ -49,6 +49,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private void generateGraphView() {
         RadioButton radionButton;
         GraphView graph = (GraphView)this.getActivity().findViewById(R.id.graph);
+        graph.removeAllSeries();
         radionButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_temperature);
         if(radionButton.isChecked()) {
             LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("temperature");
@@ -65,7 +66,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         }
         radionButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_pressure);
         if(radionButton.isChecked()){
-            LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("humidity");
+            LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("pressure");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
