@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.jjoe64.graphview.GraphView;
@@ -47,25 +46,37 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     private void generateGraphView() {
         GraphView graph = (GraphView)this.getActivity().findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB();
-        graph.addSeries(series);
-        series.setDrawDataPoints(true);
-        series.setDataPointsRadius(10);
-
+        if(getActivity().findViewById(R.id.checkbox_temperature).isActivated()) {
+            LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("temperature");
+            graph.addSeries(series);
+            series.setDrawDataPoints(true);
+            series.setDataPointsRadius(10);
+        }
+        if(getActivity().findViewById(R.id.checkbox_humidity).isActivated()){
+            LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("humidity");
+            graph.addSeries(series);
+            series.setDrawDataPoints(true);
+            series.setDataPointsRadius(10);
+        }
+        if(getActivity().findViewById(R.id.checkbox_pressure).isActivated()){
+            LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("humidity");
+            graph.addSeries(series);
+            series.setDrawDataPoints(true);
+            series.setDataPointsRadius(10);
+        }
         graph.setTitle(station_name);
     }
 
-    private LineGraphSeries<DataPoint> generateLineGraphDataFromDB() {
+    private LineGraphSeries<DataPoint> generateLineGraphDataFromDB(String dataType) {
         int count = 0;
         ArrayList<DataPoint> dataPoints = new ArrayList<DataPoint>();
         Cursor cursor = dataSource.getAllContacts();
-
 
         while(cursor.moveToNext()) {
             if(station_name == null){
                 station_name = cursor.getString(cursor.getColumnIndex("station_name"));
             }
-            double temperature = cursor.getDouble(cursor.getColumnIndex("temperature"));
+            double temperature = cursor.getDouble(cursor.getColumnIndex(dataType));
             double x = count++;
             double y = temperature;
             DataPoint point = new DataPoint(x, y);
@@ -138,19 +149,18 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                                 @Override
                                 public void run() {
                                     Switch downloadSwitch = (Switch) getActivity().findViewById(R.id.btnDownloadController);
+                                    if(downloadSwitch.isActivated())
                                     downloadSwitch.toggle();
                                 }
                             });
                         }
                     }).start();
 
-                    // TODO: 03.03.2016 kontunuerlig nedlasting til hvist tidspunkt
                 }else{
                     downloadInProgress = false;
                 }
                 break;
             case R.id.btnShowData:
-                // TODO: 03.03.2016 vis i graf eller noe annet
                 generateGraphView();
                 break;
         }
@@ -184,7 +194,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         thread.start();
         try{
             thread.join();
-            thread.sleep(500);
+            thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
