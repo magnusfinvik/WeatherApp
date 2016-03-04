@@ -130,8 +130,9 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                                 downloadOneItem();
                                 long timeEnd = System.currentTimeMillis();
                                 timeElapsed = timeEnd - timeStart;
-                            }while (downloadInProgress == true && timeElapsed < 20000);
-                            Switch button = (Switch) getActivity().findViewById(R.id.btnDownloadController);
+                            }while (downloadInProgress == true && timeElapsed < 5000);
+                            Switch downloadSwitch = (Switch) getActivity().findViewById(R.id.btnDownloadController);
+                            downloadSwitch.toggle();
                         }
                     }).start();
 
