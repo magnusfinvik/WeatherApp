@@ -49,6 +49,9 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         GraphView graph = (GraphView)this.getActivity().findViewById(R.id.graph);
         LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB();
         graph.addSeries(series);
+        series.setDrawDataPoints(true);
+        series.setDataPointsRadius(10);
+
         graph.setTitle(station_name);
     }
 
