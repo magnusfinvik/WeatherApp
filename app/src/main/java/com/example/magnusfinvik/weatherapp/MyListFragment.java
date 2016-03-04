@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -46,7 +47,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     private void generateGraphView() {
         GraphView graph = (GraphView)this.getActivity().findViewById(R.id.graph);
-    LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB();
+        LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB();
         graph.addSeries(series);
         graph.setTitle(station_name);
     }
@@ -130,6 +131,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                                 long timeEnd = System.currentTimeMillis();
                                 timeElapsed = timeEnd - timeStart;
                             }while (downloadInProgress == true && timeElapsed < 20000);
+                            Switch button = (Switch) getActivity().findViewById(R.id.btnDownloadController);
                         }
                     }).start();
 
