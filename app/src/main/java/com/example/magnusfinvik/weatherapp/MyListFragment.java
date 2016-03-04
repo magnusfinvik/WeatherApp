@@ -67,16 +67,17 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     private LineGraphSeries<DataPoint> generateLineGraphDataFromDB() {
-            int count = 0;
-            ArrayList<DataPoint> dataPoints = new ArrayList<DataPoint>();
-            Cursor cursor = dataSource.getAllContacts();
-            while(cursor.moveToNext()) {
-                double temperature = cursor.getDouble(cursor.getColumnIndex("temperature"));
-                double x = count++;
-                double y = temperature;
-                DataPoint point = new DataPoint(x, y);
-                dataPoints.add(point);
-            }
+        int count = 0;
+        ArrayList<DataPoint> dataPoints = new ArrayList<DataPoint>();
+        Cursor cursor = dataSource.getAllContacts();
+        while(cursor.moveToNext()) {
+            double temperature = cursor.getDouble(cursor.getColumnIndex("temperature"));
+            double x = count++;
+            double y = temperature;
+            DataPoint point = new DataPoint(x, y);
+            dataPoints.add(point);
+        }
+        count = 0;
         DataPoint[] points = new DataPoint[dataPoints.size()-1];
         for (DataPoint point: dataPoints) {
             points[count] = point;
