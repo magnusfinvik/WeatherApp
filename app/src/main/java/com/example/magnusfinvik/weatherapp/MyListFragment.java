@@ -192,11 +192,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         thread.start();
         try{
             thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        try {
-            thread.sleep(500, 0);
+            thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
