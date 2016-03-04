@@ -38,7 +38,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private ArrayList<WeatherData> weatherDataList = new ArrayList<>();
     private GraphView graphView;
     private LineGraphSeries<DataPoint> series;
-    private DataPoint[] dataPoints;
+    private ArrayList<DataPoint> dataPoints;
     private int numberOfPoints = 100;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,14 +49,19 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     private void generateGraphView() {
         graphView = (GraphView)this.getActivity().findViewById(R.id.graph);
-        dataPoints = generateDataFromDB();
-        series = new LineGraphSeries<DataPoint>();
-        series.setDrawDataPoints(true);
-        graphView.addSeries(series);
+        generateDataFromDB();
+        if(!dataPoints.isEmpty()) {
+            series = new LineGraphSeries<DataPoint>();
+            series.setDrawDataPoints(true);
+            graphView.addSeries(series);
+        }else{
+            Toast toast2 = Toast.makeText(getContext(), "show Data", Toast.LENGTH_SHORT);
+            toast2.show();
+        }
     }
 
-    private DataPoint[] generateDataFromDB() {
-        dataPoints = new DataPoint[numberOfPoints];
+    private void generateDataFromDB() {
+        dataPoints = new ArrayList<DataPoint>();
 
         for(int i = 0; i<numberOfPoints; i++){
             Cursor cursor = dataSource.getAllContacts();
@@ -65,11 +70,9 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                 double x = i;
                 double y = temperature;
                 DataPoint point = new DataPoint(x, y);
-                dataPoints[i] = point;
+                dataPoints.add(point);
             }
-            return dataPoints;
         }
-        return new DataPoint[0];
     }
 
     @Override
@@ -132,8 +135,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                 break;
             case R.id.btnShowData:
                 // TODO: 03.03.2016 vis i graf eller noe annet
-                Toast toast2 = Toast.makeText(getContext(), "show Data", Toast.LENGTH_SHORT);
-                toast2.show();
+                generateGraphView();
                 showDataFromDataBase();
                 break;
         }
