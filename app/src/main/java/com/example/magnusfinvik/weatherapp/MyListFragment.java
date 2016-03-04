@@ -78,7 +78,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
             dataPoints.add(point);
         }
         count = 0;
-        DataPoint[] points = new DataPoint[dataPoints.size()-1];
+        DataPoint[] points = new DataPoint[dataPoints.size()];
         for (DataPoint point: dataPoints) {
             points[count] = point;
             count++;
