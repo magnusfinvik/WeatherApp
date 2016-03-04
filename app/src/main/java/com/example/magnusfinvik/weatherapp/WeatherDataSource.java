@@ -55,6 +55,10 @@ public class WeatherDataSource {
         }
     }
 
+    public void deleteAllContent(){
+        database.execSQL("TRUNCATE TABLE " + dbHelper.WEATHER_DATA_TABLE);
+    }
+
     public void deleteWeatherData(WeatherData weatherData){
         long id = weatherData.getId();
         database.delete(dbHelper.WEATHER_DATA_TABLE, dbHelper.WEATHER_DATA_ID + "=" + id, null);

@@ -120,6 +120,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     @Override
     public void onStop() {
         super.onStop();
+        dataSource.deleteAllContent();
         dataSource.close();
     }
 
