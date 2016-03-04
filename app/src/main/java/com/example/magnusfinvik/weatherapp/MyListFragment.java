@@ -177,6 +177,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                     if(responseCode == HttpURLConnection.HTTP_OK){
                         String serverResponse = readServerResponse(httpURLConnection.getInputStream());
                         addToWeatherDataBase(serverResponse);
+
                     }else {
                         Log.d(this.getClass().toString(), "error in httpconnection");
                     }
@@ -194,7 +195,11 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        try {
+            thread.sleep(500, 0);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addToWeatherDataBase(String serverResponse) {
