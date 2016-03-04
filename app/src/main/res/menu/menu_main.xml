@@ -6,12 +6,49 @@
         android:id="@+id/action_changedownloadtime"
         android:orderInCategory="80"
         android:title="change downloadtime"
-        app:showAsAction="never" />
+        app:showAsAction="never">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/downloadtime_10"
+                    android:title="10 sec"/>
+                <item
+                    android:id="@+id/downloadtime_20"
+                    android:title="20 sec"/>
+                <item
+                    android:id="@+id/downloadtime_30"
+                    android:title="30 sec"/>
+                <item
+                    android:id="@+id/downloadtime_60"
+                    android:title="1 minute"/>
+            </group>
+        </menu>
+    </item>
     <item
         android:id="@+id/action_changeweatherstation"
         android:orderInCategory="85"
         android:title="change station"
-        app:showAsAction="never"/>
+        app:showAsAction="never">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/weatherstation_1"
+                    android:title="Nullgraderslia"/>
+                <item
+                    android:id="@+id/weatherstation_2"
+                    android:title="Iskaldtoppen"/>
+                <item
+                    android:id="@+id/weatherstation_3"
+                    android:title="Stranda"/>
+                <item
+                    android:id="@+id/weatherstation_4"
+                    android:title="Syden"/>
+                <item
+                    android:id="@+id/weatherstation_5"
+                    android:title="Nordpolen"/>
+            </group>
+        </menu>
+    </item>
     <item
         android:id="@+id/action_emptydatabase"
         android:orderInCategory="90"

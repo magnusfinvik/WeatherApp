@@ -35,8 +35,47 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        int downloadTime;
+        String weatherStation;
 
         //noinspection SimplifiableIfStatement
+        if(id == R.id.action_changedownloadtime){
+
+        }
+            if(id == R.id.downloadtime_10){
+                downloadTime = 10;
+            }
+            if(id == R.id.downloadtime_20){
+                downloadTime = 20;
+            }
+            if(id == R.id.downloadtime_30){
+                downloadTime = 30;
+            }
+            if(id == R.id.downloadtime_60){
+                downloadTime = 60;
+            }
+
+        if(id == R.id.action_changeweatherstation){
+            // do something here
+        }
+            if(id == R.id.weatherstation_1){
+                weatherStation = "Nullgraderslia";
+            }
+            if(id == R.id.weatherstation_2){
+                weatherStation = "Iskaldtoppen";
+            }
+            if(id == R.id.weatherstation_3){
+                weatherStation = "Stranda";
+            }
+            if(id == R.id.weatherstation_4){
+                weatherStation = "Syden";
+            }
+            if(id == R.id.weatherstation_5){
+                weatherStation = "Nordpolen";
+            }
+        if(id == R.id.action_emptydatabase){
+            // do something here
+        }
         if (id == R.id.action_close) {
             return true;
         }
