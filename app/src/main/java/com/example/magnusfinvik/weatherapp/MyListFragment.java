@@ -77,7 +77,12 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                 DataPoint point = new DataPoint(x, y);
                 dataPoints.add(point);
             }
-        LineGraphSeries<DataPoint> graphSeries = new LineGraphSeries<DataPoint>((DataPoint[]) dataPoints.toArray());
+        DataPoint[] points = new DataPoint[dataPoints.size()-1];
+        for (DataPoint point: dataPoints) {
+            points[count] = point;
+            count++;
+        }
+        LineGraphSeries<DataPoint> graphSeries = new LineGraphSeries<DataPoint>(points);
         return graphSeries;
     }
 
