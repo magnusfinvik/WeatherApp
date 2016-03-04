@@ -58,8 +58,11 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         ArrayList<DataPoint> dataPoints = new ArrayList<DataPoint>();
         Cursor cursor = dataSource.getAllContacts();
 
-        String station_name = cursor.getString(cursor.getColumnIndex("station_name"));
+        String station_name = null;
         while(cursor.moveToNext()) {
+            if(station_name == null){
+                station_name = cursor.getString(cursor.getColumnIndex("station_name"));
+            }
             double temperature = cursor.getDouble(cursor.getColumnIndex("temperature"));
             double x = count++;
             double y = temperature;
