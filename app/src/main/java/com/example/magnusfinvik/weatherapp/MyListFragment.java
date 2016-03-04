@@ -123,9 +123,13 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
+                            long timeStart = System.currentTimeMillis();
+                            long timeElapsed;
                             do {
                                 downloadOneItem();
-                            }while (downloadInProgress == true);
+                                long timeEnd = System.currentTimeMillis();
+                                timeElapsed = timeEnd - timeStart;
+                            }while (downloadInProgress == true && timeElapsed < 20000);
                         }
                     }).start();
 
