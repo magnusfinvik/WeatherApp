@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,19 +37,44 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private boolean downloadInProgress = false;
     private ArrayList<WeatherData> weatherDataList = new ArrayList<>();
     private GraphView graphView;
-
+    private LineGraphSeries<DataPoint> series;
+    private DataPoint[] dataPoints;
+    private int numberOfPoints = 100;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
+
         graphView = (GraphView)this.getActivity().findViewById(R.id.graph);
+        dataPoints = generateDataFromDB();
+        series = new LineGraphSeries<DataPoint>();
+        series.setDrawDataPoints(true);
+        graphView.addSeries(series);
+    }
+
+    private DataPoint[] generateDataFromDB() {
+        dataPoints = new DataPoint[numberOfPoints];
+
+        for(int i = 0; i<numberOfPoints; i++){
+            Cursor cursor = dataSource.getAllContacts();
+            if(cursor.moveToFirst()) {
+                double temperature = cursor.getDouble(cursor.getColumnIndex("temperature"));
+                double x = i;
+                double y = temperature;
+                DataPoint point = new DataPoint(x, y);
+                dataPoints[i] = point;
+            }
+            return dataPoints;
+        }
+        return new DataPoint[0];
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main, container, false);
+
     }
 
     @Override
