@@ -48,19 +48,6 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     private void generateGraphView() {
-/**        graphView = (GraphView)this.getActivity().findViewById(R.id.graph);
-        generateDataFromDB();
-        if(!dataPoints.isEmpty()) {
-            series = new LineGraphSeries<DataPoint>();
-            series.setDrawDataPoints(true);
-            graphView.addSeries(series);
-            graphView.setHorizontalScrollBarEnabled(true);
-        }else{
-            Toast toast2 = Toast.makeText(getContext(), "show Data", Toast.LENGTH_SHORT);
-            toast2.show();
-        }
-    }
- */
         GraphView graph = (GraphView)this.getActivity().findViewById(R.id.graph);
     LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB();
         graph.addSeries(series);
@@ -70,6 +57,8 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         int count = 0;
         ArrayList<DataPoint> dataPoints = new ArrayList<DataPoint>();
         Cursor cursor = dataSource.getAllContacts();
+
+        String station_name = cursor.getString(cursor.getColumnIndex("station_name"));
         while(cursor.moveToNext()) {
             double temperature = cursor.getDouble(cursor.getColumnIndex("temperature"));
             double x = count++;
@@ -84,6 +73,8 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
             count++;
         }
         LineGraphSeries<DataPoint> graphSeries = new LineGraphSeries<DataPoint>(points);
+        graphSeries.setTitle(station_name);
+
         return graphSeries;
     }
 
@@ -128,8 +119,6 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btnDownloadController:
-                Toast toast = Toast.makeText(getContext(), "download", Toast.LENGTH_SHORT);
-                toast.show();
                 if(!downloadInProgress){
                     downloadInProgress = true;
                     new Thread(new Runnable() {
@@ -149,18 +138,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
             case R.id.btnShowData:
                 // TODO: 03.03.2016 vis i graf eller noe annet
                 generateGraphView();
-                showDataFromDataBase();
                 break;
-        }
-    }
-
-
-    private void showDataFromDataBase() {
-        Cursor cursor = dataSource.getAllContacts();
-        if(cursor.moveToFirst()) {
-            String test = cursor.getString(cursor.getColumnIndex("station_name"));
-            Toast toast2 = Toast.makeText(getContext(), test, Toast.LENGTH_SHORT);
-            toast2.show();
         }
     }
 
@@ -192,7 +170,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         thread.start();
         try{
             thread.join();
-            thread.sleep(100);
+            thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
