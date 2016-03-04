@@ -28,9 +28,10 @@
 
     </LinearLayout>
 
-    <com.example.magnusfinvik.weatherapp.GraphView
+    <com.jjoe64.graphview.GraphView
         android:id="@+id/graph"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
 </LinearLayout>
