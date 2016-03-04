@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.Switch;
 
 import com.google.gson.Gson;
@@ -46,24 +47,24 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     private void generateGraphView() {
-        CheckBox checkBox;
+        RadioButton radionButton;
         GraphView graph = (GraphView)this.getActivity().findViewById(R.id.graph);
-        checkBox = (CheckBox)getActivity().findViewById(R.id.checkbox_temperature);
-        if(checkBox.isChecked()) {
+        radionButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_temperature);
+        if(radionButton.isChecked()) {
             LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("temperature");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
         }
-        checkBox = (CheckBox)getActivity().findViewById(R.id.checkbox_humidity);
-        if(checkBox.isChecked()){
+        radionButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_humidity);
+        if(radionButton.isChecked()){
             LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("humidity");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
         }
-        checkBox = (CheckBox)getActivity().findViewById(R.id.checkbox_pressure);
-        if(checkBox.isChecked()){
+        radionButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_pressure);
+        if(radionButton.isChecked()){
             LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("humidity");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
