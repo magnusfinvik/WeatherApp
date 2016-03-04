@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Switch;
 
 import com.google.gson.Gson;
@@ -45,20 +46,24 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     private void generateGraphView() {
+        CheckBox checkBox;
         GraphView graph = (GraphView)this.getActivity().findViewById(R.id.graph);
-        if(getActivity().findViewById(R.id.checkbox_temperature).isActivated()) {
+        checkBox = (CheckBox)getActivity().findViewById(R.id.checkbox_temperature);
+        if(checkBox.isChecked()) {
             LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("temperature");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
         }
-        if(getActivity().findViewById(R.id.checkbox_humidity).isActivated()){
+        checkBox = (CheckBox)getActivity().findViewById(R.id.checkbox_humidity);
+        if(checkBox.isChecked()){
             LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("humidity");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
         }
-        if(getActivity().findViewById(R.id.checkbox_pressure).isActivated()){
+        checkBox = (CheckBox)getActivity().findViewById(R.id.checkbox_pressure);
+        if(checkBox.isChecked()){
             LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("humidity");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
