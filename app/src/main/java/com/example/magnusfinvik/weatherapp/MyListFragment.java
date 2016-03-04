@@ -48,16 +48,25 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     private void generateGraphView() {
-        graphView = (GraphView)this.getActivity().findViewById(R.id.graph);
-        generateDataFromDB();
-        if(!dataPoints.isEmpty()) {
-            series = new LineGraphSeries<DataPoint>();
-            series.setDrawDataPoints(true);
-            graphView.addSeries(series);
-        }else{
-            Toast toast2 = Toast.makeText(getContext(), "show Data", Toast.LENGTH_SHORT);
-            toast2.show();
-        }
+        //graphView = (GraphView)this.getActivity().findViewById(R.id.graph);
+        //generateDataFromDB();
+        //if(!dataPoints.isEmpty()) {
+        //    series = new LineGraphSeries<DataPoint>();
+        //    series.setDrawDataPoints(true);
+        //    graphView.addSeries(series);
+        //}else{
+        //    Toast toast2 = Toast.makeText(getContext(), "show Data", Toast.LENGTH_SHORT);
+        //    toast2.show();
+       // }
+        GraphView graph = (GraphView) this.getActivity().findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        });
+        graph.addSeries(series);
     }
 
     private void generateDataFromDB() {
