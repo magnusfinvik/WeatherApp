@@ -74,9 +74,10 @@ public class MainActivity extends AppCompatActivity {
                 weatherStation = "Nordpolen";
             }
         if(id == R.id.action_emptydatabase){
-            // do something here
+            // TODO: 05.03.2016 tøm databasen når knappen trykkes
         }
         if (id == R.id.action_close) {
+            finish();
             return true;
         }
 
