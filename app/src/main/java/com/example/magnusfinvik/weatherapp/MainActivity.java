@@ -19,7 +19,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        dataSource = new WeatherDataSource(this);
+        if(dataSource == null) {
+            dataSource = new WeatherDataSource(this);
+        }
     }
 
     @Override

@@ -78,7 +78,12 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         super.onCreate(savedInstanceState);
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
-        if((savedInstanceState != null && savedInstanceState.getIntegerArrayList("xValues") != null) && series != null){
+        if(dataSource != null){
+            if(dataSource.getAllContacts() != null) {
+                generateGraphView();
+            }
+        }
+    /**    if((savedInstanceState != null && savedInstanceState.getIntegerArrayList("xValues") != null) && series != null){
             double[] xValues = savedInstanceState.getDoubleArray("xValues");
             double[] yValues = savedInstanceState.getDoubleArray("yValues");
             DataPoint[] dataPoints = new DataPoint[xValues.length];
@@ -90,9 +95,9 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
             if(series != null){
                 generateGraphView();
             }
-        }
+        } */
     }
-
+/**
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -119,7 +124,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
             }
         }
     }
-
+*/
     private void generateGraphView() {
         RadioButton radioButton;
         GraphView graph = (GraphView)this.getActivity().findViewById(R.id.graph);
