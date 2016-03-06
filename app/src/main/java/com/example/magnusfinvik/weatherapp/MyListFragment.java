@@ -1,7 +1,9 @@
 package com.example.magnusfinvik.weatherapp;
 
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,12 +38,16 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private WeatherDataSource dataSource = null;
     private boolean downloadInProgress = false;
     String station_name = null;
+    private static final String PREFS_NAME = "MyPrefranceFile";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean silent = settings.getBoolean("silentMode", false);
+
     }
 
     private void generateGraphView() {
@@ -132,6 +138,9 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         super.onStop();
         dataSource.deleteAllContent();
         dataSource.close();
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.commit();
     }
 
     @Override
@@ -175,6 +184,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         Runnable run = new Runnable() {
             @Override
             public void run() {
+                // TODO: 06.03.2016 Legg på slutten av stringen hvilken stasjon man skal laste ned fra. += enn eller annen variabel som jeg ikke husker
                 String urlString = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php";
                 HttpURLConnection httpURLConnection;
                 try {
