@@ -1,6 +1,6 @@
 package com.example.magnusfinvik.weatherapp;
 
-import android.app.Fragment;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,6 +27,10 @@ public class WeatherDataSource {
     public WeatherDataSource(MyListFragment parentFragment) {
         parent = parentFragment;
         dbHelper = new MySQLiteHelper(parent.getActivity());
+    }
+
+    public WeatherDataSource(Activity activity){
+        dbHelper = new MySQLiteHelper(activity);
     }
 
     public void open() throws SQLException{
