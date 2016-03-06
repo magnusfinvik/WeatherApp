@@ -82,7 +82,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         super.onCreate(savedInstanceState);
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
-        if(savedInstanceState != null && savedInstanceState.getDoubleArray("xValues") != null){
+        if(savedInstanceState != null && savedInstanceState.getIntegerArrayList("xValues") != null){
             double[] xValues = savedInstanceState.getDoubleArray("xValues");
             double[] yValues = savedInstanceState.getDoubleArray("yValues");
             DataPoint[] dataPoints = new DataPoint[xValues.length];
