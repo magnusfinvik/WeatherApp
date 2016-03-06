@@ -44,7 +44,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private static String urlStringStatic = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=1";
     LineGraphSeries<DataPoint> series;
 
-    public static void setStationUrl(int station) {
+    public void setStationUrl(int station) {
         urlStringStatic += station;
         Log.d("test", urlStringStatic);
         switch (station){
@@ -52,6 +52,10 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                 setStationName("nullgraderslia");
         }
 
+    }
+
+    public void setStationName(String stationName) {
+        station_name = stationName;
     }
 
     @Override
