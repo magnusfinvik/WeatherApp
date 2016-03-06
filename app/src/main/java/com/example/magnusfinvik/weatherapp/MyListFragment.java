@@ -3,8 +3,6 @@ package com.example.magnusfinvik.weatherapp;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,13 +35,11 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private WeatherDataSource dataSource = null;
     private boolean downloadInProgress = false;
     static String station_name = null;
-    private static final String PREFS_NAME = "MyPrefranceFile";
     private static String urlStringStatic = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=1";
     private static String urlWithoutStation = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=";
     private static int downloadTime = 10000;
     private LineGraphSeries<DataPoint> series;
 
-    //denne skulle være helt ferdig ned til neste kommentar
     public static void setStationUrl(int station) {
         urlStringStatic = urlWithoutStation;
         urlStringStatic += station;
@@ -77,14 +73,12 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         downloadTime = numberOfSeconds*1000;
     }
 
-    // skulle være ferdig helt til hit
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
-        if(savedInstanceState != null && savedInstanceState.getIntegerArrayList("xValues") != null){
+        if((savedInstanceState != null && savedInstanceState.getIntegerArrayList("xValues") != null) && series != null){
             double[] xValues = savedInstanceState.getDoubleArray("xValues");
             double[] yValues = savedInstanceState.getDoubleArray("yValues");
             DataPoint[] dataPoints = new DataPoint[xValues.length];
@@ -92,7 +86,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                 DataPoint dataPoint = new DataPoint(xValues[i], yValues[i]);
                 dataPoints[i] = dataPoint;
             }
-            series = new LineGraphSeries<DataPoint>(dataPoints);
+            series = new LineGraphSeries<>(dataPoints);
             if(series != null){
                 generateGraphView();
             }
@@ -102,26 +96,27 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        ArrayList<Double> xValuesList = new ArrayList<Double>();
-        ArrayList<Double> yValuesList = new ArrayList<Double>();
-
-        if(series.getValues(0, Integer.MAX_VALUE) != null) {
-            Iterator<DataPoint> values = series.getValues(0, Integer.MAX_VALUE);
-            DataPoint datapoint;
-            while (values.hasNext() == true) {
-                datapoint = values.next();
-                xValuesList.add(datapoint.getX());
-                yValuesList.add(datapoint.getY());
+        ArrayList<Double> xValuesList = new ArrayList<>();
+        ArrayList<Double> yValuesList = new ArrayList<>();
+        if(series != null) {
+            if (series.getValues(0, Integer.MAX_VALUE) != null) {
+                Iterator<DataPoint> values = series.getValues(0, Integer.MAX_VALUE);
+                DataPoint datapoint;
+                while (values.hasNext()) {
+                    datapoint = values.next();
+                    xValuesList.add(datapoint.getX());
+                    yValuesList.add(datapoint.getY());
+                }
+                ArrayList xValues = new ArrayList<>(xValuesList.size());
+                ArrayList yValues = new ArrayList<>(yValuesList.size());
+                for (int i = 0; i < xValues.size(); i++) {
+                    xValues.set(i, xValuesList.get(i + 1));
+                    yValues.set(i, yValuesList.get(i + 1));
+                }
+                // save it
+                outState.putIntegerArrayList("xValues", xValues);
+                outState.putIntegerArrayList("yValues", yValues);
             }
-            ArrayList xValues = new ArrayList<>(xValuesList.size());
-            ArrayList yValues = new ArrayList<>(yValuesList.size());
-            for (int i = 0; i < xValues.size(); i++) {
-                xValues.set(i, xValuesList.get(i + 1));
-                yValues.set(i, yValuesList.get(i + 1));
-            }
-            // save it
-            outState.putIntegerArrayList("xValues", xValues);
-            outState.putIntegerArrayList("yValues", yValues);
         }
     }
 
@@ -155,7 +150,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     private LineGraphSeries<DataPoint> generateLineGraphDataFromDB(String dataType) {
         int count = 0;
-        ArrayList<DataPoint> dataPoints = new ArrayList<DataPoint>();
+        ArrayList<DataPoint> dataPoints = new ArrayList<>();
         Cursor cursor = dataSource.getAllContacts();
 
         while(cursor.moveToNext()) {
@@ -176,15 +171,14 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
             points[count] = point;
             count++;
         }
-        LineGraphSeries<DataPoint> graphSeries = new LineGraphSeries<DataPoint>(points);
+        LineGraphSeries<DataPoint> graphSeries = new LineGraphSeries<>(points);
         return graphSeries;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_main, container, false);
 
     }
 
