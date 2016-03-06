@@ -83,48 +83,8 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                 generateGraphView();
             }
         }
-    /**    if((savedInstanceState != null && savedInstanceState.getIntegerArrayList("xValues") != null) && series != null){
-            double[] xValues = savedInstanceState.getDoubleArray("xValues");
-            double[] yValues = savedInstanceState.getDoubleArray("yValues");
-            DataPoint[] dataPoints = new DataPoint[xValues.length];
-            for(int i = 0; i<xValues.length; i++){
-                DataPoint dataPoint = new DataPoint(xValues[i], yValues[i]);
-                dataPoints[i] = dataPoint;
-            }
-            series = new LineGraphSeries<>(dataPoints);
-            if(series != null){
-                generateGraphView();
-            }
-        } */
     }
-/**
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        ArrayList<Double> xValuesList = new ArrayList<>();
-        ArrayList<Double> yValuesList = new ArrayList<>();
-        if(series != null) {
-            if (series.getValues(0, Integer.MAX_VALUE) != null) {
-                Iterator<DataPoint> values = series.getValues(0, Integer.MAX_VALUE);
-                DataPoint datapoint;
-                while (values.hasNext()) {
-                    datapoint = values.next();
-                    xValuesList.add(datapoint.getX());
-                    yValuesList.add(datapoint.getY());
-                }
-                ArrayList xValues = new ArrayList<>(xValuesList.size());
-                ArrayList yValues = new ArrayList<>(yValuesList.size());
-                for (int i = 0; i < xValues.size(); i++) {
-                    xValues.set(i, xValuesList.get(i + 1));
-                    yValues.set(i, yValuesList.get(i + 1));
-                }
-                // save it
-                outState.putIntegerArrayList("xValues", xValues);
-                outState.putIntegerArrayList("yValues", yValues);
-            }
-        }
-    }
-*/
+
     private void generateGraphView() {
         RadioButton radioButton;
         GraphView graph = (GraphView)this.getActivity().findViewById(R.id.graph);
@@ -212,7 +172,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     @Override
     public void onStop() {
-        dataSource.deleteAllContent();
+        downloadInProgress = false;
         dataSource.close();
         super.onStop();
     }
