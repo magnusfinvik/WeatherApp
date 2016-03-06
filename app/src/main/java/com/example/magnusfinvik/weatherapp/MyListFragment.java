@@ -39,6 +39,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private static String urlWithoutStation = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=";
     private static int downloadTime;
 
+    //denne skulle være helt ferdig ned til neste kommentar
     public static void setStationUrl(int station) {
         urlStringStatic = urlWithoutStation;
         urlStringStatic += station;
@@ -71,6 +72,8 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     public static void setDownloadTime(int numberOfSeconds) {
         downloadTime = numberOfSeconds;
     }
+
+    // skulle være ferdig helt til hit
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
