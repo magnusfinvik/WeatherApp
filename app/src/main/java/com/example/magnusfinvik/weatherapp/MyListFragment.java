@@ -30,6 +30,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -40,6 +42,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     String station_name = null;
     private static final String PREFS_NAME = "MyPrefranceFile";
     private static String urlStringStatic = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=1";
+    LineGraphSeries<DataPoint> series;
 
     public static void setStationUrl(int station) {
         urlStringStatic += station;
@@ -58,7 +61,43 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         CookieHandler.setDefault(cookieManager);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
         String dataSourceString = settings.getString("datasource", "");
+        if(savedInstanceState != null && savedInstanceState.getDoubleArray("xValues") != null){
+            double[] xValues = savedInstanceState.getDoubleArray("xValues");
+            double[] yValues = savedInstanceState.getDoubleArray("yValues");
+            DataPoint[] dataPoints = new DataPoint[xValues.length];
+            for(int i = 0; i<xValues.length; i++){
+                DataPoint dataPoint = new DataPoint(xValues[i], yValues[i]);
+                dataPoints[i] = dataPoint;
+            }
+            series = new LineGraphSeries<DataPoint>(dataPoints);
+            if(series != null){
+                generateGraphView();
+            }
+        }
+    }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        ArrayList<Double> xValuesList = new ArrayList<Double>();
+        ArrayList<Double> yValuesList = new ArrayList<Double>();
+
+        Iterator<DataPoint> values = series.getValues(0, Integer.MAX_VALUE);
+        DataPoint datapoint;
+        while(values.hasNext() == true){
+            datapoint = values.next();
+            xValuesList.add(datapoint.getX());
+            yValuesList.add(datapoint.getY());
+        }
+        double[] xValues = new double[xValuesList.size()];
+        double[] yValues = new double[yValuesList.size()];
+        for (int i=0; i<xValues.length; i++) {
+            xValues[i] = xValuesList.get(i+1);
+            yValues[i] = yValuesList.get(i+1);
+        }
+        // save it
+        outState.putDoubleArray("xValues", xValues);
+        outState.putDoubleArray("yValues", yValues);
     }
 
     private void generateGraphView() {
@@ -67,21 +106,21 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         graph.removeAllSeries();
         radioButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_temperature);
         if(radioButton.isChecked()) {
-            LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("temperature");
+            series = generateLineGraphDataFromDB("temperature");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
         }
         radioButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_humidity);
         if(radioButton.isChecked()){
-            LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("humidity");
+            series = generateLineGraphDataFromDB("humidity");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
         }
         radioButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_pressure);
         if(radioButton.isChecked()){
-            LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("pressure");
+            series = generateLineGraphDataFromDB("pressure");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
@@ -148,7 +187,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     public void onStop() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString("datasource", dataSource.toString());
+
         dataSource.deleteAllContent();
         dataSource.close();
 
