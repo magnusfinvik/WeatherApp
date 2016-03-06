@@ -39,6 +39,17 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private boolean downloadInProgress = false;
     String station_name = null;
     private static final String PREFS_NAME = "MyPrefranceFile";
+    private static String urlStringStatic = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=1";
+
+    public static void setStationUrl(int station) {
+        urlStringStatic += station;
+        Log.d("test", urlStringStatic);
+        switch (station){
+            case 1:
+                setStationName("nullgraderslia");
+        }
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +57,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
-        boolean silent = settings.getBoolean("silentMode", false);
+        String dataSourceString = settings.getString("datasource", "");
 
     }
 
@@ -135,12 +146,14 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     @Override
     public void onStop() {
-        super.onStop();
-        dataSource.deleteAllContent();
-        dataSource.close();
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = settings.edit();
+        editor.putString("datasource", dataSource.toString());
+        dataSource.deleteAllContent();
+        dataSource.close();
+
         editor.commit();
+        super.onStop();
     }
 
     @Override
@@ -188,7 +201,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                 String urlString = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php";
                 HttpURLConnection httpURLConnection;
                 try {
-                    URL url = new URL(urlString);
+                    URL url = new URL(urlStringStatic);
                     httpURLConnection = (HttpURLConnection) url.openConnection();
                     int responseCode = httpURLConnection.getResponseCode();
                     if(responseCode == HttpURLConnection.HTTP_OK){

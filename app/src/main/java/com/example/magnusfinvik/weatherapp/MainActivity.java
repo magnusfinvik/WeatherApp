@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         }
             if(id == R.id.weatherstation_1){
                 weatherStation = "Nullgraderslia";
+                MyListFragment.setStationUrl(1);
+
             }
             if(id == R.id.weatherstation_2){
                 weatherStation = "Iskaldtoppen";
