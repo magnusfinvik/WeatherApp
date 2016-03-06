@@ -103,22 +103,24 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         ArrayList<Double> xValuesList = new ArrayList<Double>();
         ArrayList<Double> yValuesList = new ArrayList<Double>();
 
-        Iterator<DataPoint> values = series.getValues(0, Integer.MAX_VALUE);
-        DataPoint datapoint;
-        while(values.hasNext() == true){
-            datapoint = values.next();
-            xValuesList.add(datapoint.getX());
-            yValuesList.add(datapoint.getY());
+        if(series.getValues(0, Integer.MAX_VALUE) != null) {
+            Iterator<DataPoint> values = series.getValues(0, Integer.MAX_VALUE);
+            DataPoint datapoint;
+            while (values.hasNext() == true) {
+                datapoint = values.next();
+                xValuesList.add(datapoint.getX());
+                yValuesList.add(datapoint.getY());
+            }
+            double[] xValues = new double[xValuesList.size()];
+            double[] yValues = new double[yValuesList.size()];
+            for (int i = 0; i < xValues.length; i++) {
+                xValues[i] = xValuesList.get(i + 1);
+                yValues[i] = yValuesList.get(i + 1);
+            }
+            // save it
+            outState.putDoubleArray("xValues", xValues);
+            outState.putDoubleArray("yValues", yValues);
         }
-        double[] xValues = new double[xValuesList.size()];
-        double[] yValues = new double[yValuesList.size()];
-        for (int i=0; i<xValues.length; i++) {
-            xValues[i] = xValuesList.get(i+1);
-            yValues[i] = yValuesList.get(i+1);
-        }
-        // save it
-        outState.putDoubleArray("xValues", xValues);
-        outState.putDoubleArray("yValues", yValues);
     }
 
     private void generateGraphView() {
