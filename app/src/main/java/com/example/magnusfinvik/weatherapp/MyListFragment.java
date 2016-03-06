@@ -1,9 +1,7 @@
 package com.example.magnusfinvik.weatherapp;
 
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,8 +28,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
-
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -39,23 +35,43 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     private WeatherDataSource dataSource = null;
     private boolean downloadInProgress = false;
-    String station_name = null;
+    static String station_name = null;
     private static final String PREFS_NAME = "MyPrefranceFile";
-    private static String urlStringStatic = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=1";
-    LineGraphSeries<DataPoint> series;
+    private static String urlStringStatic = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=";
+    private static String urlWithoutStation = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=";
+    private static int downloadTime;
 
-    public void setStationUrl(int station) {
+    public static void setStationUrl(int station) {
+        urlStringStatic = urlWithoutStation;
         urlStringStatic += station;
-        Log.d("test", urlStringStatic);
         switch (station){
+            case 0:
+                setStationName("Nullgraderslia");
+                break;
             case 1:
-                setStationName("nullgraderslia");
+                setStationName("Iskaldtoppen");
+                break;
+            case 2:
+                setStationName("Stranda");
+                break;
+            case 3:
+                setStationName("Syden");
+                break;
+            case 4:
+                setStationName("Nordpolen");
+                break;
+            default:
+                setStationName(null);
         }
 
     }
 
-    public void setStationName(String stationName) {
+    public static void setStationName(String stationName) {
         station_name = stationName;
+    }
+
+    public static void setDownloadTime(int numberOfSeconds) {
+        downloadTime = numberOfSeconds;
     }
 
     @Override
@@ -63,45 +79,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         super.onCreate(savedInstanceState);
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String dataSourceString = settings.getString("datasource", "");
-        if(savedInstanceState != null && savedInstanceState.getDoubleArray("xValues") != null){
-            double[] xValues = savedInstanceState.getDoubleArray("xValues");
-            double[] yValues = savedInstanceState.getDoubleArray("yValues");
-            DataPoint[] dataPoints = new DataPoint[xValues.length];
-            for(int i = 0; i<xValues.length; i++){
-                DataPoint dataPoint = new DataPoint(xValues[i], yValues[i]);
-                dataPoints[i] = dataPoint;
-            }
-            series = new LineGraphSeries<DataPoint>(dataPoints);
-            if(series != null){
-                generateGraphView();
-            }
-        }
-    }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        ArrayList<Double> xValuesList = new ArrayList<Double>();
-        ArrayList<Double> yValuesList = new ArrayList<Double>();
-
-        Iterator<DataPoint> values = series.getValues(0, Integer.MAX_VALUE);
-        DataPoint datapoint;
-        while(values.hasNext() == true){
-            datapoint = values.next();
-            xValuesList.add(datapoint.getX());
-            yValuesList.add(datapoint.getY());
-        }
-        double[] xValues = new double[xValuesList.size()];
-        double[] yValues = new double[yValuesList.size()];
-        for (int i=0; i<xValues.length; i++) {
-            xValues[i] = xValuesList.get(i+1);
-            yValues[i] = yValuesList.get(i+1);
-        }
-        // save it
-        outState.putDoubleArray("xValues", xValues);
-        outState.putDoubleArray("yValues", yValues);
     }
 
     private void generateGraphView() {
@@ -110,21 +88,21 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         graph.removeAllSeries();
         radioButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_temperature);
         if(radioButton.isChecked()) {
-            series = generateLineGraphDataFromDB("temperature");
+            LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("temperature");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
         }
         radioButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_humidity);
         if(radioButton.isChecked()){
-            series = generateLineGraphDataFromDB("humidity");
+            LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("humidity");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
         }
         radioButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_pressure);
         if(radioButton.isChecked()){
-            series = generateLineGraphDataFromDB("pressure");
+            LineGraphSeries<DataPoint> series = generateLineGraphDataFromDB("pressure");
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
@@ -189,13 +167,8 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
 
     @Override
     public void onStop() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SharedPreferences.Editor editor = settings.edit();
-
         dataSource.deleteAllContent();
         dataSource.close();
-
-        editor.commit();
         super.onStop();
     }
 
@@ -214,7 +187,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                                 downloadOneItem();
                                 long timeEnd = System.currentTimeMillis();
                                 timeElapsed = timeEnd - timeStart;
-                            }while (downloadInProgress == true && timeElapsed < 5000);
+                            }while (downloadInProgress == true && timeElapsed < downloadTime);
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -241,7 +214,6 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
             @Override
             public void run() {
                 // TODO: 06.03.2016 Legg på slutten av stringen hvilken stasjon man skal laste ned fra. += enn eller annen variabel som jeg ikke husker
-                String urlString = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php";
                 HttpURLConnection httpURLConnection;
                 try {
                     URL url = new URL(urlStringStatic);

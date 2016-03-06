@@ -34,54 +34,51 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        int downloadTime;
-        String weatherStation;
+
 
         //noinspection SimplifiableIfStatement
         if(id == R.id.action_changedownloadtime){
 
         }
             if(id == R.id.downloadtime_10){
-                downloadTime = 10;
+                 MyListFragment.setDownloadTime(10);
             }
             if(id == R.id.downloadtime_20){
-                downloadTime = 20;
+                MyListFragment.setDownloadTime(20);
             }
             if(id == R.id.downloadtime_30){
-                downloadTime = 30;
+                MyListFragment.setDownloadTime(30);
             }
             if(id == R.id.downloadtime_60){
-                downloadTime = 60;
+                MyListFragment.setDownloadTime(60);
             }
 
         if(id == R.id.action_changeweatherstation){
-            // do something here
         }
             if(id == R.id.weatherstation_1){
-                weatherStation = "Nullgraderslia";
-                MyListFragment.setStationUrl(1);
+                MyListFragment.setStationUrl(0);
+                emptyDatabase();
 
             }
             if(id == R.id.weatherstation_2){
-                weatherStation = "Iskaldtoppen";
+                MyListFragment.setStationUrl(1);
+                emptyDatabase();
+
             }
             if(id == R.id.weatherstation_3){
-                weatherStation = "Stranda";
+                MyListFragment.setStationUrl(2);
+                emptyDatabase();
             }
             if(id == R.id.weatherstation_4){
-                weatherStation = "Syden";
+                MyListFragment.setStationUrl(3);
+                emptyDatabase();
             }
             if(id == R.id.weatherstation_5){
-                weatherStation = "Nordpolen";
+                MyListFragment.setStationUrl(4);
+                emptyDatabase();
             }
         if(id == R.id.action_emptydatabase){
-            try {
-                dataSource.open();
-                dataSource.deleteAllContent();
-                dataSource.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            emptyDatabase();
         }
         if (id == R.id.action_close) {
             finish();
@@ -89,5 +86,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void emptyDatabase() {
+        try {
+            dataSource.open();
+            dataSource.deleteAllContent();
+            dataSource.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
