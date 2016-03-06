@@ -36,9 +36,9 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     private boolean downloadInProgress = false;
     static String station_name = null;
     private static final String PREFS_NAME = "MyPrefranceFile";
-    private static String urlStringStatic = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=";
+    private static String urlStringStatic = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=1";
     private static String urlWithoutStation = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=";
-    private static int downloadTime;
+    private static int downloadTime = 10000;
     private LineGraphSeries<DataPoint> series;
 
     //denne skulle være helt ferdig ned til neste kommentar
@@ -72,7 +72,7 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     public static void setDownloadTime(int numberOfSeconds) {
-        downloadTime = numberOfSeconds;
+        downloadTime = numberOfSeconds*1000;
     }
 
     // skulle være ferdig helt til hit
@@ -111,15 +111,15 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
                 xValuesList.add(datapoint.getX());
                 yValuesList.add(datapoint.getY());
             }
-            double[] xValues = new double[xValuesList.size()];
-            double[] yValues = new double[yValuesList.size()];
-            for (int i = 0; i < xValues.length; i++) {
-                xValues[i] = xValuesList.get(i + 1);
-                yValues[i] = yValuesList.get(i + 1);
+            ArrayList xValues = new ArrayList<>(xValuesList.size());
+            ArrayList yValues = new ArrayList<>(yValuesList.size());
+            for (int i = 0; i < xValues.size(); i++) {
+                xValues.set(i, xValuesList.get(i + 1));
+                yValues.set(i, yValuesList.get(i + 1));
             }
             // save it
-            outState.putDoubleArray("xValues", xValues);
-            outState.putDoubleArray("yValues", yValues);
+            outState.putIntegerArrayList("xValues", xValues);
+            outState.putIntegerArrayList("yValues", yValues);
         }
     }
 
@@ -160,6 +160,8 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
             if(station_name == null){
                 station_name = cursor.getString(cursor.getColumnIndex("station_name"));
             }
+            String test = cursor.getString(cursor.getColumnIndex("station_position"));
+            Log.d("test", test);
             double temperature = cursor.getDouble(cursor.getColumnIndex(dataType));
             double x = count++;
             double y = temperature;
@@ -254,7 +256,6 @@ public class MyListFragment extends Fragment implements View.OnClickListener, Ad
         Runnable run = new Runnable() {
             @Override
             public void run() {
-                // TODO: 06.03.2016 Legg på slutten av stringen hvilken stasjon man skal laste ned fra. += enn eller annen variabel som jeg ikke husker
                 HttpURLConnection httpURLConnection;
                 try {
                     URL url = new URL(urlStringStatic);
